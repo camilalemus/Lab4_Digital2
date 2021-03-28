@@ -3,19 +3,19 @@
 // Carnet: 18272
 //**************************************************************************
 
-const byte LED_ROJO = RED_LED;
-const byte LED_AZUL = BLUE_LED;
-const byte LED_VERDE = GREEN_LED;
-
-volatile byte state = LOW;
-
 const int push_1 = PUSH1;
 const int push_2 = PUSH2;
 
+int start = 0;
+int semaf = 0;
+
+volatile byte state = LOW;
+
+
 void setup() {
-  pinMode(LED_ROJO, OUTPUT);
-  pinMode(LED_AZUL, OUTPUT);
-  pinMode(LED_VERDE, OUTPUT);
+  pinMode(RED_LED, OUTPUT);
+  pinMode(BLUE_LED, OUTPUT);
+  pinMode(GREEN_LED, OUTPUT);
   
 
 
@@ -37,34 +37,37 @@ void setup() {
 //  pinMode(LED7_J2, OUTPUT);
 //  pinMode(LED8_J2, OUTPUT);
 
-//  attachInterrupt(digitalPinToInterrupt(push_1), player_1, RISING);
-//  attachInterrupt(digitalPinToInterrupt(push_2), player_2, RISING);
+  attachInterrupt(digitalPinToInterrupt(push_1), button1, RISING);
+  attachInterrupt(digitalPinToInterrupt(push_2), button2, RISING);
 }
 
 void loop() {
 
-  if (digitalRead (push_1 == 1) || digitalRead (push_2 == 1)){
+  if (semaf == 1){
     semaforo();
     }
-//  
-//  digitalWrite(ledPin, state);
-//}
-//
-//void player_1() {
-//  state = !state;
-//}
-//
-//void player_2() {
-//  state = !state;
+  
+}
+
+void button1() {
+  semaf = 1;
+  state = !state;
+}
+
+void button2() {
+  semaf = 1;
+  state = !state;
 }
 
 void semaforo() {
-  LED_ROJO = HIGH;
-  LED_VERDE = LOW;
+  digitalWrite (RED_LED, HIGH);
+  digitalWrite (GREEN_LED, LOW);
   delay(1000);
-  LED_ROJO = HIGH;  // El RGB para amarillo es 0% azul, 100% rojo y 100% verde
-  LED_VERDE = HIGH;
-  delay(3000);
-  LED_ROJO = LOW;
-  LED_VERDE = HIGH;
+  digitalWrite (RED_LED, HIGH);  // El RGB para amarillo es 0% azul, 100% rojo y 100% verde
+  digitalWrite (GREEN_LED, HIGH);
+  delay(1000);
+  digitalWrite (RED_LED, LOW);
+  digitalWrite (GREEN_LED, HIGH);
+  return;
+  start = 1;
 }
