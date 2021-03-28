@@ -3,13 +3,12 @@
 // Carnet: 18272
 //**************************************************************************
 
-const int push_1 = PUSH1;
-const int push_2 = PUSH2;
 
-int start = 0;
-int semaf = 0;
+int start_game = 0;
+int start_semaf = 0;
 
 volatile byte state = LOW;
+
 
 
 void setup() {
@@ -17,7 +16,8 @@ void setup() {
   pinMode(BLUE_LED, OUTPUT);
   pinMode(GREEN_LED, OUTPUT);
   
-
+  pinMode(PUSH1, INPUT_PULLUP);
+  pinMode(PUSH2, INPUT_PULLUP);
 
 //  pinMode(LED1_J1, OUTPUT);
 //  pinMode(LED2_J1, OUTPUT);
@@ -37,26 +37,23 @@ void setup() {
 //  pinMode(LED7_J2, OUTPUT);
 //  pinMode(LED8_J2, OUTPUT);
 
-  attachInterrupt(digitalPinToInterrupt(push_1), button1, RISING);
-  attachInterrupt(digitalPinToInterrupt(push_2), button2, RISING);
+  attachInterrupt(digitalPinToInterrupt(PUSH1), button1, RISING);
+  attachInterrupt(digitalPinToInterrupt(PUSH2), button2, RISING);
 }
 
 void loop() {
-
-  if (semaf == 1){
+  if (start_semaf == 1){
+    start_semaf = 0;
     semaforo();
     }
-  
 }
 
 void button1() {
-  semaf = 1;
-  state = !state;
+  start_semaf = 1;
 }
 
 void button2() {
-  semaf = 1;
-  state = !state;
+  start_semaf = 1;
 }
 
 void semaforo() {
@@ -68,6 +65,5 @@ void semaforo() {
   delay(1000);
   digitalWrite (RED_LED, LOW);
   digitalWrite (GREEN_LED, HIGH);
-  return;
-  start = 1;
+  start_game = 1;
 }
